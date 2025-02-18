@@ -3,6 +3,7 @@ const library = [];
 
 let container = document.querySelector(".container");
 
+// Book constructor
 function Book(title,author,pages,readStatus){
     this.title =title;
     this.author= author;
@@ -13,6 +14,12 @@ function Book(title,author,pages,readStatus){
         return temp_str;
     }
 }
+
+// Add this function that will be available to all Book objects using prototypal inheritance
+Book.prototype.toggleReadStatus = function(){
+    this.readStatus = this.readStatus? false: true;
+}
+
 
 function addBookToLibrary(title,author,pages,readStatus) {
 
@@ -32,23 +39,25 @@ function cardGenerator(title,author,pages,readStatus,index){
     <button class="card-close" id="${index}">X</button>
     <table>
                 <tr>
-                    <td id="title">Title</td>
-                    <td for="title">${title}</td>
+                    <td>Title</td>
+                    <td>${title}</td>
                 </tr>
                 <tr>
-                    <td id="author">Author</td>
-                    <td for="author">${author}</td>
+                    <td>Author</td>
+                    <td>${author}</td>
                 </tr>
                 <tr>
-                    <td id="pages">Pages</td>
-                    <td for="pages">${pages}</td>
+                    <td>Pages</td>
+                    <td>${pages}</td>
                 </tr>
                 <tr>
-                    <td ><label for="readStatus">readStatus:</label></td>
-                    <td><select name="readStatus" id="readStatus">
-  <option value="read">read</option>
-  <option value="unread">unread</option>
-</select></td>
+                    <td >Read?</td>
+                    <td class="radio-btn"> 
+                    <input type="radio" id="read_yes" name="${index}readStatus" value="yes" ${readStatus?"checked":""}>
+                    <label for="read_yes">Yes</label><br>
+                    <input type="radio" id="read_no" name="${index}readStatus" value="no" ${readStatus?"":"checked"} >
+                    <label for="read_no">No</label><br>
+                    </td>
                 </tr>
 
             </table>`
@@ -56,11 +65,7 @@ function cardGenerator(title,author,pages,readStatus,index){
     return card;
 }
 
-
-
-
-
-
+// load library object array in container as cards
 function load_Library_In_Container(){
     container.innerHTML = "";
     library.forEach((obj, index) => {
@@ -70,13 +75,11 @@ function load_Library_In_Container(){
 }
 
 
-
+//delete book from library and re-render container functions:
 function remove_book_from_library(index){
-    // console.log(typeof index);
+    // console.log(typeof index);    //index type is string but still works in splice
     library.splice(index, 1);
 }
-
-
 function delete_book(event){
     if (event.target.classList.contains("card-close")){
         remove_book_from_library(event.target.id)
@@ -84,16 +87,12 @@ function delete_book(event){
     }
 }
 
-
-addBookToLibrary("harry", "noob", "2323", true);
-load_Library_In_Container();
-
+//add click event listener to container for deleting books
 container.addEventListener("click", delete_book)
 
 
+// add book button event listener to show dialog
 let add_book_btn = document.querySelector("#add-book-btn");
-
-
 let dialog = document.querySelector("dialog");
 
 add_book_btn.addEventListener("click", event => {
@@ -105,12 +104,35 @@ add_book_btn.addEventListener("click", event => {
 });
 
 
-let submit_btn = document.querySelector("#submit-btn");
+// dialog submit button event listener
+let dialog_submit_btn = document.querySelector("#submit-btn");
 
-submit_btn.addEventListener("click", event =>{
-    event.preventDefault();
+dialog_submit_btn.addEventListener("click", event =>{
+    event.preventDefault();  //stop default behavior of submitting the form
     let title_input = document.querySelector("#title");
     let title = title_input.value;
-    console.log(title);
+    let author_input = document.querySelector("#author");
+    let author = author_input.value;
+    let pages_input = document.querySelector("#pages");
+    let pages = pages_input.value;
+    let read_input = document.querySelector("#readStatus");
+    let readStatus = read_input.checked;
+    console.log(title,author,pages,readStatus);
+    addBookToLibrary(title,author,pages,readStatus);
+    load_Library_In_Container();
     dialog.close();
 });
+
+
+// add event listener to container for radio button change
+container.addEventListener("change", event=>{
+    let book_no = parseInt(event.target.name);
+    library[book_no].toggleReadStatus();
+    console.log(library[book_no])
+    load_Library_In_Container();
+});
+
+
+// add sample book
+addBookToLibrary("Sample", "Sample", "121", false);
+load_Library_In_Container();
