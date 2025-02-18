@@ -13,6 +13,16 @@ body{
     height: 100vh;
 }
 
+#add-book-btn{
+    padding: 5px;
+    /* background-color: greenyellow; */
+    /* border-radius: 8px; */
+}
+#add-book-btn:hover{
+    background-color: greenyellow;
+}
+
+
 
 .container{
     display: flex;
@@ -25,16 +35,19 @@ body{
     justify-content: start;
     align-content: start;
     flex-wrap: wrap;
-    gap: 10px
+    gap: 10px;
+    overflow:scroll;
+   
 }
 
 
 .card{
-    width: 180px;
+    width: 160px;
     height: 150px;
     border: 2px solid black;
     display: flex;
     padding: 2px;
+    background-color: antiquewhite;
     /* flex-direction: row-reverse; */
 
     /* Hide any overflowed content */
@@ -50,9 +63,22 @@ body{
 
 .card-close{
     position: absolute;
-    top:0;
-    right: 0;
+    top:1px;
+    right: 1px;
     max-height: 20px;
     min-width: 20px;
     border-radius: 50%;
+    background-color: red;
+}
+
+
+dialog{
+    margin: auto;
+    padding: 5px;
+}
+
+ul{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
